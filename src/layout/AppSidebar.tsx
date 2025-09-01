@@ -17,7 +17,7 @@ import {
   TableIcon,
   UserCircleIcon,
 } from "../icons/index";
-//import SidebarWidget from "./SidebarWidget";
+
 
 type NavItem = {
   name: string;
@@ -29,71 +29,54 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
-   // name: "Dashboard",
-    name: "Dashboard", path: "/", 
-    //subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendrier",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
+    name: "Tableau de bord", path: "/dashboard", 
   },
 
   {
-    name: "Forms",
+    name: "Eléves", path:"eleve",
+    icon: <TableIcon />,  
+  },
+
+  {
+    name: "Classes", path: "classe",
+    icon: <PageIcon/>
+  },
+
+  {
+    name: "Présence", path:"presence",
+    icon: <BoxCubeIcon />,  
+  },
+
+  
+
+  {
+    name: "Stock", path:"stock",
+    icon: <UserCircleIcon />,  
+  },
+
+  {
+    name: "Repas", path:"repas",
     icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
   },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
-    path: "/blank",
-    // subItems: [
-    //   { name: "Blank Page", path: "/blank", pro: false },
-    //   { name: "404 Error", path: "/error-404", pro: false },
-    // ],
-  },
+
 ];
 
 const othersItems: NavItem[] = [
   {
-    icon: <PieChartIcon />,
-    name: "Charts",
-    subItems: [
-      { name: "Line Chart", path: "/line-chart", pro: false },
-      { name: "Bar Chart", path: "/bar-chart", pro: false },
-    ],
+    name: "Rapport", path:"rapport",
+    icon: <PieChartIcon />,  
   },
+
   {
-    icon: <BoxCubeIcon />,
-    name: "UI Elements",
-    subItems: [
-      { name: "Alerts", path: "/alerts", pro: false },
-      { name: "Avatar", path: "/avatars", pro: false },
-      { name: "Badge", path: "/badge", pro: false },
-      { name: "Buttons", path: "/buttons", pro: false },
-      { name: "Images", path: "/images", pro: false },
-      { name: "Videos", path: "/videos", pro: false },
-    ],
+    name: "Journal d'activité", path:"journal",
+    icon: <ListIcon />,
   },
+
   {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
-    ],
+    icon: <UserCircleIcon />,
+    name: "Utilisateurs", path:"utilisateur"
   },
+  
 ];
 
 const AppSidebar: React.FC = () => {
@@ -179,7 +162,7 @@ const AppSidebar: React.FC = () => {
                     : "0px",
               }}
             >
-              <ul className="mt-2 space-y-1 ml-9">
+              <ul className="mt-1 space-y-1 ml-9">
                 {nav.subItems.map((subItem) => (
                   <li key={subItem.name}>
                     <Link
@@ -292,7 +275,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed mt-10 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
         ${
           isExpanded || isMobileOpen
             ? "w-[290px]"
@@ -306,14 +289,14 @@ const AppSidebar: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`py-8 flex  ${
+        className={`py-4 flex  ${
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link href="/">
+        <Link href="/dashboard">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
-              <Image
+              {/* <Image
                 className="dark:hidden"
                 src="/images/logo/logo-dark.svg"
                 alt="Logo"
@@ -326,7 +309,13 @@ const AppSidebar: React.FC = () => {
                 alt="Logo"
                 width={150}
                 height={40}
-              />
+              /> */}
+              <h2
+                className="text-xl font-bold text-gray-800 text-center  dark:text-white/90"
+                
+              >
+                G - Cantine Scolaire
+              </h2>
             </>
           ) : (
             <Image
@@ -339,11 +328,11 @@ const AppSidebar: React.FC = () => {
         </Link>
       </div>
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
-        <nav className="mb-6">
+        <nav className="mb-2">
           <div className="flex flex-col gap-4">
             <div>
               <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                className={`mb-2 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
                     ? "lg:justify-center"
                     : "justify-start"
@@ -360,14 +349,14 @@ const AppSidebar: React.FC = () => {
 
             <div className="">
               <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                className={`mb-2 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
                     ? "lg:justify-center"
                     : "justify-start"
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
+                  "Autres"
                 ) : (
                   <HorizontaLDots />
                 )}

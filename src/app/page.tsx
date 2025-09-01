@@ -1,3 +1,4 @@
+
 "use client";
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
@@ -8,6 +9,16 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
+import { Metadata } from "next";
+import ThemeTogglerTwo from "@/components/common/ThemeTogglerTwo";
+import { authService } from "@/services/auth";
+
+
+// export const metadata: Metadata = {
+//   title:
+//     "Authentification | Cantine scolaire",
+//   description: "Gestion de presence et de suivi de cantine scolaire",
+// };
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,65 +28,45 @@ export default function SignInForm() {
   const [error, setError] = useState("")
   const router = useRouter();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try{
-      const response = await api.post('/auth/login', {
-        email,
-        password,
-      });
-      console.log('logiiiiiiiinnnnn', response.data);
-      localStorage.setItem('token', response.data.access_token);
-      router.push("/admin");
-    } catch(err:any) {
-        setError(err.response?.data?.message || 'Erreurrrrrrrrrrrrrr');
-    }
     
+    try {
+      const response = await authService.login(email, password);
+      console.log('Réponse du login :', response);
+
+      const { user, access_token } = response;
+      router.push('/dashboard');
+      console.log('Redirection effectuée');
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Erreur');
+    }
   };
 
   return (
-    <div className="flex flex-col flex-1 lg:w-1/2 w-full">
-      <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
-        <Link
-          href="/"
-          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-        >
-          <ChevronLeftIcon />
-          Back to Home
-        </Link>
-      </div>
+    <div className="flex flex-col flex-1  w-full  from-green-300">   
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
-          <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md text-center">
-              Authentification
+          <div className="mb-6 sm:mt-6">
+            <h1 className="mb-2 font-semibold text-gray-900 text-title-sm dark:text-white/90 sm:text-title-md text-center">
+              Bienvenue
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
-              Veillez saisir votre email et mot de passe
-            </p>
+            <p className="text-lg text-gray-500 mb-6 mt-6 text-center">
+              Veillez saisir votre adresse email et mot de passe pour l'authentification </p>  
           </div>
           <div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-              
-            </div>
-            
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">             
+            </div>           
             <form onSubmit={handleSubmit}>
-              <div className="space-y-6">
-                <div>
-                  <Label>
-                    Email <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <Input
-                    placeholder="info@gmail.com"
-                    type="email"
-                    defaultValue={email}
-                    onChange={e => setEmail(e.target.value)}
+              <div className="space-y-6 ">
+                <div className="text-lg text-gray-100">
+                  <Label>Email <span className="text-error-500">*</span>{" "}</Label>
+                  <Input type="email" defaultValue={email} onChange={e => setEmail(e.target.value)}
+                    placeholder="info@gmail.com"  
                   />
                 </div>
-                <div>
-                  <Label>
-                    Mot de passe <span className="text-error-500">*</span>{" "}
-                  </Label>
+                <div className="text-lg text-gray-100">
+                  <Label >Mot de passe <span className="text-error-500">*</span>{" "}</Label>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
@@ -117,7 +108,7 @@ export default function SignInForm() {
               </div>
             </form>
 
-            <div className="mt-5 ">
+            <div className="mt-5 items-center justify-center">
               <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
                 Pas de compte ? {""}
                 <Link
@@ -130,7 +121,13 @@ export default function SignInForm() {
             </div>
           </div>
         </div>
+        <div className="fixed bottom-6 right-6 z-50 hidden sm:block">
+          <ThemeTogglerTwo />
+        </div>
       </div>
+      <footer className="mt-12 mb-15 text-center text-gray-400 text-sm">&copy; {new Date().getFullYear()} Jedyth. Tous droits réservés.</footer>
     </div>
+    
   );
 }
+
